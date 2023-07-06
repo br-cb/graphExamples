@@ -87,7 +87,7 @@ onMounted(() => {
 main {
   width: 100vw;
   box-sizing: border-box;
-  height: 100vmin;
+  height: 100vh;
   display: grid;
   grid-template-rows: auto auto 1fr;
   gap: 1rem;
@@ -97,8 +97,9 @@ main {
 }
 
 nav {
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 1rem;
 
   >#nav_flex {
@@ -107,6 +108,10 @@ nav {
     gap: 1rem;
     flex-wrap: wrap;
     padding: 0;
+
+    >li {
+      cursor: pointer;
+    }
   }
 
   >#code_toggle {
