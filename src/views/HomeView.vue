@@ -82,8 +82,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-:root {}
-
 main {
   width: 100vw;
   box-sizing: border-box;
