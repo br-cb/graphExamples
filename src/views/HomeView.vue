@@ -1,16 +1,16 @@
 <template>
   <main>
-    <h1>{{ title }}</h1>
+    <h1 id="page_title">{{ title }}</h1>
     <nav>
       <ul id="nav_flex">
         <li class="option_button" v-for="(item, index) in options" :key="`option ${index}`" @click="libInUse(item)"
           :class="[title === item ? 'selected' : 'not_selected']">{{
             item }}</li>
       </ul>
-      <button id="code_toggle" @click="toggle = !toggle">Toggle Code</button>
+      <button id="code_toggle" @click="setToggle()">Toggle Code</button>
     </nav>
     <section id="main_grid"
-      :style="[toggle ? { 'grid-template-columns': '4fr 2fr' } : { 'grid-template-columns': '1fr 0fr' }]">
+      :style="[toggle === 'open' ? { 'grid-template-columns': '4fr 2fr' } : { 'grid-template-columns': '1fr 0fr' }]">
       <article id="graph" class="page_content">
         <component :is="graph"></component>
       </article>
@@ -31,7 +31,18 @@ import { ref, onMounted } from 'vue'
 import { AmCharts, ApexCharts, ChartJS, Chartist, HighCharts } from '@/components/graphs';
 import { AmChartsData, ApexChartsData, ChartJSData, ChartistData, HighChartsData } from '@/data';
 
-const toggle = ref(true)
+const toggle = ref('')
+
+function setToggle() {
+  const currentState = toggle.value
+  if (currentState === 'open') {
+    localStorage.setItem('toggle', 'close')
+    toggle.value = 'close'
+  } else {
+    localStorage.setItem('toggle', 'open')
+    toggle.value = 'open'
+  }
+}
 
 const code = ref();
 const graph = ref();
@@ -49,34 +60,48 @@ const libInUse = (selected: string) => {
   title.value = selected;
   switch (selected) {
     case 'Am Charts':
+    default:
       code.value = AmChartsData
       graph.value = AmCharts
+      localStorage.setItem('location', 'Am Charts')
       break;
     case 'Apex Charts':
       code.value = ApexChartsData
       graph.value = ApexCharts
+      localStorage.setItem('location', 'Apex Charts')
       break;
     case 'Chartist':
       code.value = ChartistData
       graph.value = Chartist
+      localStorage.setItem('location', 'Chartist')
       break;
     case 'Chart.js':
       code.value = ChartJSData
       graph.value = ChartJS
+      localStorage.setItem('location', 'Chart.js')
       break;
     case 'High Charts':
       code.value = HighChartsData
       graph.value = HighCharts
-      break;
-    default:
-      code.value = AmChartsData
-      graph.value = AmCharts
+      localStorage.setItem('location', 'High Charts')
       break;
   }
 }
 
 onMounted(() => {
-  libInUse('Am Charts')
+  const lsi = localStorage.getItem('toggle')
+  if (lsi === null) {
+    localStorage.setItem('toggle', 'open')
+    toggle.value = 'open'
+  } else {
+    toggle.value = lsi
+  }
+  const location = localStorage.getItem('location')
+  if (location !== null) {
+    libInUse(location)
+  } else {
+    libInUse('Am Charts')
+  }
 })
 
 </script>
@@ -92,6 +117,11 @@ main {
   padding: 1rem;
   background: linear-gradient(45deg, rgb(17, 24, 38), rgb(8, 19, 15));
   color: white;
+
+}
+
+#page_title {
+  margin: 0px;
 }
 
 nav {
@@ -122,6 +152,10 @@ nav {
     transition: 0.3s;
     box-shadow: 0 0 3px 1px black;
 
+    @media (width <=500px) {
+      display: none;
+    }
+
     &:focus {
       outline: none;
     }
@@ -145,7 +179,12 @@ nav {
   transition: 0.5s ease-in-out;
   filter: drop-shadow(1px 1px 5px black);
   position: relative;
-  height: 500px;
+  height: 80%;
+  box-sizing: border-box;
+
+  @media (width <=500px) {
+    grid-template-columns: 1fr !important;
+  }
 
   >#graph {
     display: grid;
@@ -158,6 +197,10 @@ nav {
     overflow-x: hidden;
     overflow-y: auto;
     background: #1d262f;
+
+    @media (width <=500px) {
+      display: none;
+    }
   }
 
   >.page_content {

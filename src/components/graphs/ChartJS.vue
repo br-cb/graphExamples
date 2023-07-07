@@ -1,5 +1,7 @@
 <template>
-    <canvas id="myChart"></canvas>
+    <div id="chart_js_wrapper" style="min-height: 0;">
+        <canvas id="myChart"></canvas>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -28,3 +30,10 @@ onMounted(() => {
     }
 })
 </script>
+
+<style scoped>
+#mychart {
+    height: 450px;
+    width: 100%;
+}
+</style>
