@@ -115,7 +115,7 @@ main {
   grid-template-rows: auto auto 1fr;
   gap: 1rem;
   padding: 1rem;
-  background: linear-gradient(45deg, rgb(17, 24, 38), rgb(8, 19, 15));
+  background: linear-gradient(45deg, rgb(31, 44, 69), rgb(19, 44, 35));
   color: white;
 
 }
